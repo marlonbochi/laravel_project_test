@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <script setup lang="ts">
 	import { Head, useForm, Link } from '@inertiajs/vue3';
 	import { ref, watch, onMounted } from 'vue';
@@ -5,6 +6,13 @@
 	import AppLayout from '@/layouts/AppLayout.vue';
 	import { dashboard } from '@/routes';
 	import { type BreadcrumbItem } from '@/types';
+
+	// Helper function to decode HTML entities
+	const decodeHtmlEntities = (text: string): string => {
+		const textarea = document.createElement('textarea');
+		textarea.innerHTML = text;
+		return textarea.value;
+	};
 
 	interface Product {
 		id: number;
@@ -206,13 +214,13 @@
 								preserve-state
 								preserve-scroll
                             >
-                                {{ link.label }}
+                                <span v-html="decodeHtmlEntities(link.label)"></span>
                             </Link>
                             <span
                                 v-else
                                 class="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
                             >
-                                {{ link.label }}
+                                <span v-html="decodeHtmlEntities(link.label)"></span>
                             </span>
                         </template>
                     </div>

@@ -18,6 +18,7 @@ class UserController extends Controller
 		return Inertia::render('Users/Index', [
 			'filters' => $request->only('search'),
 			'users' => fn() => User::query()  // ← Closure lazy!
+				->with('roles') // Load roles relationship
 				->when($search, fn($q, $s) => 
 					$q->where('name', 'like', "%{$s}%")
 					->orWhere('email', 'like', "%{$s}%")

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <script setup lang="ts">
 	import { Head, useForm, Link } from '@inertiajs/vue3';
 	import { ref, watch } from 'vue';
@@ -6,10 +7,24 @@
 	import { dashboard } from '@/routes';
 	import { type BreadcrumbItem } from '@/types';
 
+	// Helper function to decode HTML entities
+	const decodeHtmlEntities = (text: string): string => {
+		const textarea = document.createElement('textarea');
+		textarea.innerHTML = text;
+		return textarea.value;
+	};
+
 	interface User {
 		id: number;
 		name: string;
 		email: string;
+		roles: Array<{
+			id: number;
+			name: string;
+			slug: string;
+			description: string;
+			is_active: boolean;
+		}>;
 		created_at: string;
 		updated_at: string;
 	}
@@ -96,6 +111,9 @@
                                     Email
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    Roles
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Created
                                 </th>
                                 <th scope="col" class="relative px-6 py-3">
@@ -110,6 +128,23 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                     {{ user.email }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex flex-wrap gap-1">
+                                        <span 
+                                            v-for="role in user.roles" 
+                                            :key="role.id"
+                                            class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                                            :class="{
+                                                'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200': role.slug === 'administrator',
+                                                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': role.slug === 'manager',
+                                                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': role.slug === 'editor',
+                                                'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200': role.slug === 'viewer'
+                                            }"
+                                        >
+                                            {{ role.name }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                     {{ new Date(user.created_at).toLocaleDateString() }}
@@ -150,13 +185,13 @@
 								preserve-state
 								preserve-scroll
                             >
-                                {{ link.label }}
+                                <span v-html="decodeHtmlEntities(link.label)"></span>
                             </Link>
                             <span
                                 v-else
                                 class="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
                             >
-                                {{ link.label }}
+                                <span v-html="decodeHtmlEntities(link.label)"></span>
                             </span>
                         </template>
                     </div>
