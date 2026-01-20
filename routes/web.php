@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -17,6 +18,7 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('dashboard/products', [ProductController::class, 'index'])->name('products.index');
 });
 
 require __DIR__.'/settings.php';
