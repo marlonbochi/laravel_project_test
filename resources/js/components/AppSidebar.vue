@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Package, Users } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, Package, Users, Wallet } from 'lucide-vue-next';
 
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -34,6 +34,11 @@ const mainNavItems: NavItem[] = [
         title: 'Products',
         href: '/dashboard/products',
         icon: Package,
+    },
+    {
+        title: 'Purchases',
+        href: '/dashboard/purchases',
+        icon: Wallet,
     },
 ];
 
