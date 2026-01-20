@@ -112,7 +112,7 @@
                             <!-- Previous Purchase -->
                             <Link
                                 v-if="props.pagination.previous_id"
-                                :href="`/dashboard/purchases/${props.pagination.previous_id}`"
+                                :href="`/dashboard/purchases/${props.pagination.previous_id}?page=${props.pagination.page}`"
                                 class="inline-flex items-center px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-800"
                             >
                                 ← Previous
@@ -129,7 +129,7 @@
                             <!-- Next Purchase -->
                             <Link
                                 v-if="props.pagination.next_id"
-                                :href="`/dashboard/purchases/${props.pagination.next_id}`"
+                                :href="`/dashboard/purchases/${props.pagination.next_id}?page=${props.pagination.page}`"
                                 class="inline-flex items-center px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-800"
                             >
                                 Next →
