@@ -12,23 +12,21 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $search = $request->input('search');
-        
-        $users = User::query()
-            ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
-            })
-            ->orderBy('name', 'asc')
-            ->paginate(15)
-            ->withQueryString();
-            
-        return Inertia::render('Users/Index', [
-            'users' => $users,
-            'filters' => $request->only('search')
-        ]);
-    }
+	{
+		$search = $request->input('search');
+		
+		return Inertia::render('Users/Index', [
+			'filters' => $request->only('search'),
+			'users' => fn() => User::query()  // ← Closure lazy!
+				->when($search, fn($q, $s) => 
+					$q->where('name', 'like', "%{$s}%")
+					->orWhere('email', 'like', "%{$s}%")
+				)
+				->orderBy('name')
+				->paginate(15)
+				->withQueryString()
+		]);
+	}
 
     /**
      * Show the form for creating a new resource.

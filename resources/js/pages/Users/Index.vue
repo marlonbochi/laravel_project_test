@@ -1,63 +1,63 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+	import { Head, useForm, Link } from '@inertiajs/vue3';
+	import { ref, watch } from 'vue';
 
-import AppLayout from '@/layouts/AppLayout.vue';
-import { dashboard } from '@/routes';
-import { type BreadcrumbItem } from '@/types';
+	import AppLayout from '@/layouts/AppLayout.vue';
+	import { dashboard } from '@/routes';
+	import { type BreadcrumbItem } from '@/types';
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    created_at: string;
-    updated_at: string;
-}
+	interface User {
+		id: number;
+		name: string;
+		email: string;
+		created_at: string;
+		updated_at: string;
+	}
 
-interface PaginatedUsers {
-    data: User[];
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    links: Array<{
-        url: string | null;
-        label: string;
-        active: boolean;
-    }>;
-}
+	interface PaginatedUsers {
+		data: User[];
+		current_page: number;
+		last_page: number;
+		per_page: number;
+		total: number;
+		links: Array<{
+			url: string | null;
+			label: string;
+			active: boolean;
+		}>;
+	}
 
-const props = defineProps<{
-    users: PaginatedUsers;
-    filters: {
-        search?: string;
-    };
-}>();
+	const props = defineProps<{
+		users: PaginatedUsers;
+		filters: {
+			search?: string;
+		};
+	}>();
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'Users',
-        href: '/dashboard/users',
-    },
-];
+	const breadcrumbs: BreadcrumbItem[] = [
+		{
+			title: 'Dashboard',
+			href: dashboard().url,
+		},
+		{
+			title: 'Users',
+			href: '/dashboard/users',
+		},
+	];
 
-const search = ref(props.filters.search || '');
+	const search = ref(props.filters.search || '');
 
-const form = useForm({
-    search: props.filters.search || '',
-});
+	const form = useForm({
+		search: props.filters.search || '',
+	});
 
-watch(search, (value) => {
-    form.search = value;
-    form.get('/dashboard/users', {
-        preserveState: true,
-        preserveScroll: true,
-    });
-});
+	watch(search, (value) => {
+		form.search = value;
+		form.get('/dashboard/users', {
+			preserveState: true,
+			preserveScroll: true,
+		});
+	});
 </script>
 
 <template>
@@ -138,7 +138,7 @@ watch(search, (value) => {
                     
                     <div class="flex items-center space-x-2">
                         <template v-for="link in users.links" :key="link.label">
-                            <a
+                            <Link
                                 v-if="link.url"
                                 :href="link.url"
                                 :class="[
@@ -147,13 +147,17 @@ watch(search, (value) => {
                                         ? 'bg-indigo-600 text-white border-indigo-600'
                                         : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700'
                                 ]"
-                                v-html="link.label"
-                            />
+								preserve-state
+								preserve-scroll
+                            >
+                                {{ link.label }}
+                            </Link>
                             <span
                                 v-else
                                 class="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
-                                v-html="link.label"
-                            />
+                            >
+                                {{ link.label }}
+                            </span>
                         </template>
                     </div>
                 </div>
